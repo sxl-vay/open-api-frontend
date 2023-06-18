@@ -154,7 +154,7 @@ const TableList: React.FC = () => {
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
           </Button>,
         ]}
-        request={ async ({params}: { params: any }) =>{
+        request={ async (params: API.listInterfaceInfoByPageUsingGETParams) =>{
           const res =await listInterfaceInfoByPageUsingGET({
             ...params
           })
