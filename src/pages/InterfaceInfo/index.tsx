@@ -15,26 +15,18 @@ import { Button, Drawer, Input, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
-import {listInterfaceInfoByPageUsingGET} from "@/services/open-api-backend/interfaceInfoController";
+import {
+  addInterfaceInfoUsingPOST,
+  listInterfaceInfoByPageUsingGET
+} from "@/services/open-api-backend/interfaceInfoController";
+import CreateModal from "@/pages/InterfaceInfo/components/CreateModal";
 
 /**
  * @en-US Add node
  * @zh-CN 添加节点
  * @param fields
  */
-const handleAdd = async (fields: API.RuleListItem) => {
-  const hide = message.loading('正在添加');
-  try {
-    await addRule({ ...fields });
-    hide();
-    message.success('Added successfully');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Adding failed, please try again!');
-    return false;
-  }
-};
+
 
 /**
  * @en-US Update node
@@ -101,7 +93,20 @@ const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
-
+  const handleAdd = async (fields: API.InterfaceInfoAddRequest) => {
+    const hide = message.loading('正在添加');
+    try {
+      await addInterfaceInfoUsingPOST({ ...fields });
+      hide();
+      message.success('Added successfully');
+      handleModalOpen(false);
+      return true;
+    } catch (error:any) {
+      hide();
+      message.error(error.message);
+      return false;
+    }
+  };
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置
@@ -292,6 +297,7 @@ const TableList: React.FC = () => {
           />
         )}
       </Drawer>
+      <CreateModal columns={columns} onCancel={()=>{handleModalOpen(false)}} onSubmit={(values)=>{handleAdd(values)}} visible={createModalOpen}/>
     </PageContainer>
   );
 };
