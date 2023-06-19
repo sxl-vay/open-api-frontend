@@ -16,48 +16,19 @@ import React, { useRef, useState } from 'react';
 import type { FormValueType } from './components/UpdateModal';
 import UpdateModal from './components/UpdateModal';
 import {
-  addInterfaceInfoUsingPOST,
+  addInterfaceInfoUsingPOST, deleteInterfaceInfoUsingPOST,
   listInterfaceInfoByPageUsingGET, updateInterfaceInfoUsingPOST
 } from "@/services/open-api-backend/interfaceInfoController";
 import CreateModal from "@/pages/InterfaceInfo/components/CreateModal";
-
-/**
- * @en-US Add node
- * @zh-CN 添加节点
- * @param fields
- */
+import {conforms} from "lodash";
 
 
-/**
- * @en-US Update node
- * @zh-CN 更新节点
- *
- * @param fields
- */
 
 
-/**
- *  Delete node
- * @zh-CN 删除节点
- *
- * @param selectedRows
- */
-const handleRemove = async (selectedRows: API.RuleListItem[]) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-  try {
-    await removeRule({
-      key: selectedRows.map((row) => row.key),
-    });
-    hide();
-    message.success('Deleted successfully and will refresh soon');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Delete failed, please try again');
-    return false;
-  }
-};
+
+
+
+
 
 const TableList: React.FC = () => {
   /**
@@ -76,6 +47,12 @@ const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
+
+  /**
+   * @en-US Add node
+   * @zh-CN 添加节点
+   * @param fields
+   */
   const handleAdd = async (fields: API.InterfaceInfoAddRequest) => {
     const hide = message.loading('正在添加');
     try {
@@ -87,6 +64,12 @@ const TableList: React.FC = () => {
     }
   };
 
+  /**
+   * @en-US Update node
+   * @zh-CN 更新节点
+   *
+   * @param fields
+   */
   const handleUpdate = async (fields: API.InterfaceInfoAddRequest) => {
     const hide = message.loading('Configuring');
     try {
@@ -104,6 +87,32 @@ const TableList: React.FC = () => {
       return false;
     }
   };
+
+  /**
+   *  Delete node
+   * @zh-CN 删除节点
+   *
+   * @param record
+   */
+  const handleRemove = async (record: API.InterfaceInfoVO) => {
+
+    const hide = message.loading('正在删除');
+    if (!record) return true;
+    try {
+      await deleteInterfaceInfoUsingPOST({
+        id:record.id
+      });
+      hide();
+      message.success('Deleted successfully and will refresh soon');
+      actionRef.current.reload();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('Delete failed, please try again');
+      return false;
+    }
+  };
+
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置
@@ -173,10 +182,12 @@ const TableList: React.FC = () => {
         >
           <FormattedMessage id="pages.searchTable.config" defaultMessage="修改" />
         </a>,
-        <a key="subscribeAlert" href="https://procomponents.ant.design/">
+        <a key="config" onClick={()=>{
+          handleRemove(record)
+        }}  >
           <FormattedMessage
             id="pages.searchTable.subscribeAlert"
-            defaultMessage="测试"
+            defaultMessage="删除"
           />
         </a>,
       ],
