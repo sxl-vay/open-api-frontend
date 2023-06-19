@@ -78,8 +78,8 @@ const TableList: React.FC = () => {
 
       });
       hide();
-
       message.success('Configuration is successful');
+      actionRef.current.reload();
       return true;
     } catch (error) {
       hide();
