@@ -4,7 +4,6 @@ import {
 } from '@ant-design/pro-components';
 import React from 'react';
 import {Modal} from "antd";
-import {values} from "lodash";
 
 
 export type Props = {

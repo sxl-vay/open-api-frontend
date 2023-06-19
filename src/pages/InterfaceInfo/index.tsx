@@ -1,6 +1,5 @@
-import { addRule, removeRule, rule, updateRule } from '@/services/ant-design-pro/api';
-import { PlusOutlined } from '@ant-design/icons';
-import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
+import {PlusOutlined} from '@ant-design/icons';
+import type {ActionType, ProColumns, ProDescriptionsItemProps} from '@ant-design/pro-components';
 import {
   FooterToolbar,
   ModalForm,
@@ -10,24 +9,15 @@ import {
   ProFormTextArea,
   ProTable,
 } from '@ant-design/pro-components';
-import { FormattedMessage, useIntl } from '@umijs/max';
-import { Button, Drawer, Input, message } from 'antd';
-import React, { useRef, useState } from 'react';
-import type { FormValueType } from './components/UpdateModal';
+import {FormattedMessage, useIntl} from '@umijs/max';
+import {Button, Drawer, message} from 'antd';
+import React, {useRef, useState} from 'react';
 import UpdateModal from './components/UpdateModal';
 import {
   addInterfaceInfoUsingPOST, deleteInterfaceInfoUsingPOST,
   listInterfaceInfoByPageUsingGET, updateInterfaceInfoUsingPOST
 } from "@/services/open-api-backend/interfaceInfoController";
 import CreateModal from "@/pages/InterfaceInfo/components/CreateModal";
-import {conforms} from "lodash";
-
-
-
-
-
-
-
 
 
 const TableList: React.FC = () => {
@@ -56,8 +46,12 @@ const TableList: React.FC = () => {
   const handleAdd = async (fields: API.InterfaceInfoAddRequest) => {
     const hide = message.loading('正在添加');
     try {
-     await addInterfaceInfoUsingPOST({ ...fields });
-    } catch (error:any) {
+      await addInterfaceInfoUsingPOST({...fields});
+      message.success('新建接口成功');
+      actionRef.current.reload();
+      hide();
+      return true;
+    } catch (error: any) {
       hide();
       message.error(error.message);
       return false;
@@ -100,7 +94,7 @@ const TableList: React.FC = () => {
     if (!record) return true;
     try {
       await deleteInterfaceInfoUsingPOST({
-        id:record.id
+        id: record.id
       });
       hide();
       message.success('Deleted successfully and will refresh soon');
@@ -129,14 +123,14 @@ const TableList: React.FC = () => {
       title: '接口名称',
       dataIndex: 'name',
       valueType: 'text',
-      formItemProps:{
-        rules:[
+      formItemProps: {
+        rules: [
           {
             required: true,
-            message:'必须指定接口名称'
+            message: '必须指定接口名称'
           },
           {
-            type:'int'
+            type: 'int'
           }
         ]
       }
@@ -169,7 +163,7 @@ const TableList: React.FC = () => {
       hideInForm: true
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="操作" />,
+      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="操作"/>,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
@@ -180,11 +174,11 @@ const TableList: React.FC = () => {
             setCurrentRow(record);
           }}
         >
-          <FormattedMessage id="pages.searchTable.config" defaultMessage="修改" />
+          <FormattedMessage id="pages.searchTable.config" defaultMessage="修改"/>
         </a>,
-        <a key="config" onClick={()=>{
+        <a key="config" onClick={() => {
           handleRemove(record)
-        }}  >
+        }}>
           <FormattedMessage
             id="pages.searchTable.subscribeAlert"
             defaultMessage="删除"
@@ -216,11 +210,12 @@ const TableList: React.FC = () => {
               handleModalOpen(true);
             }}
           >
-            <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
+            <PlusOutlined/> <FormattedMessage id="pages.searchTable.new" defaultMessage="New"/>
           </Button>,
         ]}
-        request={ async (params: API.listInterfaceInfoByPageUsingGETParams) =>{
-          const res =await listInterfaceInfoByPageUsingGET({
+        request={async (params: API.listInterfaceInfoByPageUsingGETParams) => {
+          console.log("shxl:pagesize",params)
+          const res = await listInterfaceInfoByPageUsingGET({
             ...params
           })
           if (res.data) {
@@ -243,9 +238,9 @@ const TableList: React.FC = () => {
         <FooterToolbar
           extra={
             <div>
-              <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen" />{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              <FormattedMessage id="pages.searchTable.item" defaultMessage="项" />
+              <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen"/>{' '}
+              <a style={{fontWeight: 600}}>{selectedRowsState.length}</a>{' '}
+              <FormattedMessage id="pages.searchTable.item" defaultMessage="项"/>
               &nbsp;&nbsp;
               <span>
                 <FormattedMessage
@@ -253,7 +248,7 @@ const TableList: React.FC = () => {
                   defaultMessage="Total number of service calls"
                 />{' '}
                 {selectedRowsState.reduce((pre, item) => pre + item.callNo!, 0)}{' '}
-                <FormattedMessage id="pages.searchTable.tenThousand" defaultMessage="万" />
+                <FormattedMessage id="pages.searchTable.tenThousand" defaultMessage="万"/>
               </span>
             </div>
           }
@@ -311,7 +306,7 @@ const TableList: React.FC = () => {
           width="md"
           name="name"
         />
-        <ProFormTextArea width="md" name="desc" />
+        <ProFormTextArea width="md" name="desc"/>
       </ModalForm>
       <UpdateModal
         columns={columns}
@@ -358,7 +353,17 @@ const TableList: React.FC = () => {
           />
         )}
       </Drawer>
-      <CreateModal columns={columns} onCancel={()=>{handleModalOpen(false)}} onSubmit={(values)=>{handleAdd(values)}} visible={createModalOpen}/>
+      <CreateModal
+        columns={columns}
+        onCancel={() => {
+          handleModalOpen(false)
+        }}
+        onSubmit={async (values) => {
+          const success = await handleAdd(values);
+          if (success) {
+            handleModalOpen(false)
+          }
+        }} visible={createModalOpen}/>
     </PageContainer>
   );
 };
