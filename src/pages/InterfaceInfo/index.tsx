@@ -112,6 +112,11 @@ const TableList: React.FC = () => {
 
   const columns: ProColumns<API.RuleListItem>[] = [
     {
+      title: '接口id',
+      dataIndex: 'id',
+      valueType: 'text',
+    },
+    {
       title: '接口名称',
       dataIndex: 'name',
       valueType: 'text',
@@ -153,6 +158,28 @@ const TableList: React.FC = () => {
       dataIndex: 'updateTime',
       valueType: 'dateTime',
       hideInForm: true
+    },
+    {
+      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="操作" />,
+      dataIndex: 'option',
+      valueType: 'option',
+      render: (_, record) => [
+        <a
+          key="config"
+          onClick={() => {
+            handleUpdateModalOpen(true);
+            setCurrentRow(record);
+          }}
+        >
+          <FormattedMessage id="pages.searchTable.config" defaultMessage="修改" />
+        </a>,
+        <a key="subscribeAlert" href="https://procomponents.ant.design/">
+          <FormattedMessage
+            id="pages.searchTable.subscribeAlert"
+            defaultMessage="测试"
+          />
+        </a>,
+      ],
     },
 
 
@@ -276,6 +303,7 @@ const TableList: React.FC = () => {
         <ProFormTextArea width="md" name="desc" />
       </ModalForm>
       <UpdateModal
+        columns={columns}
         onSubmit={async (value) => {
           const success = await handleUpdate(value);
           if (success) {
@@ -292,7 +320,7 @@ const TableList: React.FC = () => {
             setCurrentRow(undefined);
           }
         }}
-        updateModalOpen={updateModalOpen}
+        visible={updateModalOpen}
         values={currentRow || {}}
       />
 
