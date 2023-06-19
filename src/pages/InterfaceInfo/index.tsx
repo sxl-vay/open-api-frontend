@@ -13,11 +13,11 @@ import {
 import { FormattedMessage, useIntl } from '@umijs/max';
 import { Button, Drawer, Input, message } from 'antd';
 import React, { useRef, useState } from 'react';
-import type { FormValueType } from './components/UpdateForm';
-import UpdateForm from './components/UpdateForm';
+import type { FormValueType } from './components/UpdateModal';
+import UpdateModal from './components/UpdateModal';
 import {
   addInterfaceInfoUsingPOST,
-  listInterfaceInfoByPageUsingGET
+  listInterfaceInfoByPageUsingGET, updateInterfaceInfoUsingPOST
 } from "@/services/open-api-backend/interfaceInfoController";
 import CreateModal from "@/pages/InterfaceInfo/components/CreateModal";
 
@@ -34,24 +34,7 @@ import CreateModal from "@/pages/InterfaceInfo/components/CreateModal";
  *
  * @param fields
  */
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('Configuring');
-  try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
-    hide();
 
-    message.success('Configuration is successful');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Configuration failed, please try again!');
-    return false;
-  }
-};
 
 /**
  *  Delete node
@@ -96,14 +79,28 @@ const TableList: React.FC = () => {
   const handleAdd = async (fields: API.InterfaceInfoAddRequest) => {
     const hide = message.loading('正在添加');
     try {
-      await addInterfaceInfoUsingPOST({ ...fields });
-      hide();
-      message.success('Added successfully');
-      handleModalOpen(false);
-      return true;
+     await addInterfaceInfoUsingPOST({ ...fields });
     } catch (error:any) {
       hide();
       message.error(error.message);
+      return false;
+    }
+  };
+
+  const handleUpdate = async (fields: API.InterfaceInfoAddRequest) => {
+    const hide = message.loading('Configuring');
+    try {
+      await updateInterfaceInfoUsingPOST({
+        ...fields,
+
+      });
+      hide();
+
+      message.success('Configuration is successful');
+      return true;
+    } catch (error) {
+      hide();
+      message.error('Configuration failed, please try again!');
       return false;
     }
   };
@@ -117,23 +114,48 @@ const TableList: React.FC = () => {
     {
       title: '接口名称',
       dataIndex: 'name',
-      valueType: 'text'
+      valueType: 'text',
+      formItemProps:{
+        rules:[
+          {
+            required: true,
+            message:'必须指定接口名称'
+          },
+          {
+            type:'int'
+          }
+        ]
+      }
     },
     {
-      title: 'description',
+      title: '描述',
       dataIndex: 'description',
       valueType: 'textarea'
     },
     {
-      title: 'method',
+      title: '方法类型',
       dataIndex: 'method',
       valueType: 'text'
     },
     {
-      title: 'createTime',
-      dataIndex: 'createTime',
-      valueType: 'dateTime'
+      title: '地址',
+      dataIndex: 'url',
+      valueType: 'text'
     },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      valueType: 'dateTime',
+      hideInForm: true
+    },
+    {
+      title: '更新时间',
+      dataIndex: 'updateTime',
+      valueType: 'dateTime',
+      hideInForm: true
+    },
+
+
   ];
 
   return (
@@ -253,7 +275,7 @@ const TableList: React.FC = () => {
         />
         <ProFormTextArea width="md" name="desc" />
       </ModalForm>
-      <UpdateForm
+      <UpdateModal
         onSubmit={async (value) => {
           const success = await handleUpdate(value);
           if (success) {
