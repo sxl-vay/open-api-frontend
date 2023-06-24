@@ -14,7 +14,11 @@ import {Button, Drawer, message} from 'antd';
 import React, {useRef, useState} from 'react';
 import UpdateModal from './components/UpdateModal';
 import {
-  listBookkeepingByPageUsingPOST,addUsingPOST
+  addUsingPOST,
+  deleteBookkeepingInfoUsingPOST,
+  updateBookkeepingInfoUsingPOST,
+  listBookkeepingByPageUsingPOST
+
 } from "@/services/open-api-backend/bookkeepingController";
 import CreateModal from "@/pages/Bookkeeping/components/CreateModal";
 
@@ -63,23 +67,23 @@ const TableList: React.FC = () => {
    *
    * @param fields
    */
-  // const handleUpdate = async (fields: API.BookkeepingAddRequest) => {
-  //   const hide = message.loading('Configuring');
-  //   try {
-  //     await updateUsingPOST({
-  //       ...fields,
-  //
-  //     });
-  //     hide();
-  //     message.success('Configuration is successful');
-  //     actionRef.current.reload();
-  //     return true;
-  //   } catch (error) {
-  //     hide();
-  //     message.error('Configuration failed, please try again!');
-  //     return false;
-  //   }
-  // };
+  const handleUpdate = async (fields: API.BookkeepingAddRequest) => {
+    const hide = message.loading('Configuring');
+    try {
+      await updateBookkeepingInfoUsingPOST({
+        ...fields,
+
+      });
+      hide();
+      message.success('Configuration is successful');
+      actionRef.current.reload();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('Configuration failed, please try again!');
+      return false;
+    }
+  };
 
   /**
    *  Delete node
@@ -87,24 +91,24 @@ const TableList: React.FC = () => {
    *
    * @param record
    */
-  // const handleRemove = async (record: API.BookkeepingBookVO) => {
-  //
-  //   const hide = message.loading('正在删除');
-  //   if (!record) return true;
-  //   try {
-  //     await deleteInfoUsingPOST({
-  //       id: record.id
-  //     });
-  //     hide();
-  //     message.success('Deleted successfully and will refresh soon');
-  //     actionRef.current.reload();
-  //     return true;
-  //   } catch (error) {
-  //     hide();
-  //     message.error('Delete failed, please try again');
-  //     return false;
-  //   }
-  // };
+  const handleRemove = async (record: API.BookkeepingBookVO) => {
+
+    const hide = message.loading('正在删除');
+    if (!record) return true;
+    try {
+      await deleteBookkeepingInfoUsingPOST({
+        id: record.id
+      });
+      hide();
+      message.success('Deleted successfully and will refresh soon');
+      actionRef.current.reload();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('Delete failed, please try again');
+      return false;
+    }
+  };
 
   /**
    * @en-US International configuration
@@ -122,12 +126,17 @@ const TableList: React.FC = () => {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
-      hideInForm: true
+    },
+
+    {
+      title: '余额宝',
+      dataIndex: 'zfbFund',
+      valueType: 'text',
     },
     {
-      title: '农业银行',
-      dataIndex: 'agriculturalBank',
-      valueType: 'text'
+      title: '基金',
+      dataIndex: 'fund',
+      valueType: 'text',
     },
     {
       title: '债券',
@@ -135,9 +144,21 @@ const TableList: React.FC = () => {
       valueType: 'text'
     },
     {
+      title: '股票',
+      dataIndex: 'shares',
+      valueType: 'text',
+    },
+    {
       title: '建设银行',
       dataIndex: 'constructionBank',
       valueType: 'text'
+    },
+
+
+    {
+      title: '微信余额',
+      dataIndex: 'wechatYue',
+      valueType: 'text',
     },
     {
       title: '外借资金',
@@ -145,47 +166,37 @@ const TableList: React.FC = () => {
       valueType: 'text'
     },
     {
-      title: '基金',
-      dataIndex: 'fund',
+      title: '微信基金',
+      dataIndex: 'wechatFund',
       valueType: 'text',
-      hideInForm: true
     },
+
+    {
+      title: '农业银行',
+      dataIndex: 'agriculturalBank',
+      valueType: 'text'
+    },
+
+
+
     {
       title: '招商银行',
       dataIndex: 'merchantsBank',
       valueType: 'text',
-      hideInForm: true
-    },
-    {
-      title: '股票',
-      dataIndex: 'shares',
-      valueType: 'text',
-      hideInForm: true
-    },
-    {
-      title: '微信基金',
-      dataIndex: 'wechatFund',
-      valueType: 'text',
-      hideInForm: true
     },
 
-    {
-      title: '微信余额',
-      dataIndex: 'wechatYue',
-      valueType: 'text',
-      hideInForm: true
-    },
 
-    {
-      title: '余额宝',
-      dataIndex: 'zfbFund',
-      valueType: 'text',
-      hideInForm: true
-    },
+
+
 
     {
       title: '支付宝余额',
       dataIndex: 'zfbYue',
+      valueType: 'text',
+    },
+    {
+      title: '总计',
+      dataIndex: 'total',
       valueType: 'text',
       hideInForm: true
     },
@@ -206,7 +217,7 @@ const TableList: React.FC = () => {
           <FormattedMessage id="pages.searchTable.config" defaultMessage="修改"/>
         </a>,
         <a key="config" onClick={() => {
-          // handleRemove(record)
+          handleRemove(record)
           console.log('click delete')
         }}>
           <FormattedMessage

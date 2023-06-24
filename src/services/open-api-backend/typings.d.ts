@@ -63,6 +63,7 @@ declare namespace API {
     agriculturalBank?: number;
     bond?: number;
     constructionBank?: number;
+    createTime?: string;
     debt?: number;
     fund?: number;
     merchantsBank?: number;
@@ -79,13 +80,13 @@ declare namespace API {
     constructionBank?: number;
     createTime?: string;
     debt?: number;
-    /** 是否删除 */
     deleteType?: number;
     fund?: number;
-    id: number;
+    id?: number;
     merchantsBank?: number;
     shares?: number;
-    userId: number;
+    total?: number;
+    userId?: number;
     wechatFund?: number;
     wechatYue?: number;
     zfbFund?: number;
@@ -107,6 +108,7 @@ declare namespace API {
     agriculturalBank?: number;
     bond?: number;
     constructionBank?: number;
+    createTime?: string;
     debt?: number;
     fund?: number;
     id?: number;
