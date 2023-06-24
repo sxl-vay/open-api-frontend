@@ -14,10 +14,9 @@ import {Button, Drawer, message} from 'antd';
 import React, {useRef, useState} from 'react';
 import UpdateModal from './components/UpdateModal';
 import {
-  addInterfaceInfoUsingPOST, deleteInterfaceInfoUsingPOST,
-  listInterfaceInfoByPageUsingGET, updateInterfaceInfoUsingPOST
-} from "@/services/open-api-backend/interfaceInfoController";
-import CreateModal from "@/pages/InterfaceInfo/components/CreateModal";
+  listBookkeepingByPageUsingPOST,addUsingPOST
+} from "@/services/open-api-backend/bookkeepingController";
+import CreateModal from "@/pages/Bookkeeping/components/CreateModal";
 
 
 const TableList: React.FC = () => {
@@ -43,10 +42,10 @@ const TableList: React.FC = () => {
    * @zh-CN 添加节点
    * @param fields
    */
-  const handleAdd = async (fields: API.InterfaceInfoAddRequest) => {
+  const handleAdd = async (fields: API.BookkeepingAddRequest) => {
     const hide = message.loading('正在添加');
     try {
-      await addInterfaceInfoUsingPOST({...fields});
+      await addUsingPOST({...fields});
       message.success('新建接口成功');
       actionRef.current.reload();
       hide();
@@ -64,23 +63,23 @@ const TableList: React.FC = () => {
    *
    * @param fields
    */
-  const handleUpdate = async (fields: API.InterfaceInfoAddRequest) => {
-    const hide = message.loading('Configuring');
-    try {
-      await updateInterfaceInfoUsingPOST({
-        ...fields,
-
-      });
-      hide();
-      message.success('Configuration is successful');
-      actionRef.current.reload();
-      return true;
-    } catch (error) {
-      hide();
-      message.error('Configuration failed, please try again!');
-      return false;
-    }
-  };
+  // const handleUpdate = async (fields: API.BookkeepingAddRequest) => {
+  //   const hide = message.loading('Configuring');
+  //   try {
+  //     await updateUsingPOST({
+  //       ...fields,
+  //
+  //     });
+  //     hide();
+  //     message.success('Configuration is successful');
+  //     actionRef.current.reload();
+  //     return true;
+  //   } catch (error) {
+  //     hide();
+  //     message.error('Configuration failed, please try again!');
+  //     return false;
+  //   }
+  // };
 
   /**
    *  Delete node
@@ -88,24 +87,24 @@ const TableList: React.FC = () => {
    *
    * @param record
    */
-  const handleRemove = async (record: API.InterfaceInfoVO) => {
-
-    const hide = message.loading('正在删除');
-    if (!record) return true;
-    try {
-      await deleteInterfaceInfoUsingPOST({
-        id: record.id
-      });
-      hide();
-      message.success('Deleted successfully and will refresh soon');
-      actionRef.current.reload();
-      return true;
-    } catch (error) {
-      hide();
-      message.error('Delete failed, please try again');
-      return false;
-    }
-  };
+  // const handleRemove = async (record: API.BookkeepingBookVO) => {
+  //
+  //   const hide = message.loading('正在删除');
+  //   if (!record) return true;
+  //   try {
+  //     await deleteInfoUsingPOST({
+  //       id: record.id
+  //     });
+  //     hide();
+  //     message.success('Deleted successfully and will refresh soon');
+  //     actionRef.current.reload();
+  //     return true;
+  //   } catch (error) {
+  //     hide();
+  //     message.error('Delete failed, please try again');
+  //     return false;
+  //   }
+  // };
 
   /**
    * @en-US International configuration
@@ -115,40 +114,9 @@ const TableList: React.FC = () => {
 
   const columns: ProColumns<API.RuleListItem>[] = [
     {
-      title: '接口id',
+      title: 'id',
       dataIndex: 'id',
       valueType: 'text',
-    },
-    {
-      title: '接口名称',
-      dataIndex: 'name',
-      valueType: 'text',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '必须指定接口名称'
-          },
-          {
-            type: 'int'
-          }
-        ]
-      }
-    },
-    {
-      title: '描述',
-      dataIndex: 'description',
-      valueType: 'textarea'
-    },
-    {
-      title: '方法类型',
-      dataIndex: 'method',
-      valueType: 'text'
-    },
-    {
-      title: '地址',
-      dataIndex: 'url',
-      valueType: 'text'
     },
     {
       title: '创建时间',
@@ -157,11 +125,72 @@ const TableList: React.FC = () => {
       hideInForm: true
     },
     {
-      title: '更新时间',
-      dataIndex: 'updateTime',
-      valueType: 'dateTime',
+      title: '农业银行',
+      dataIndex: 'agriculturalBank',
+      valueType: 'text'
+    },
+    {
+      title: '债券',
+      dataIndex: 'bond',
+      valueType: 'text'
+    },
+    {
+      title: '建设银行',
+      dataIndex: 'constructionBank',
+      valueType: 'text'
+    },
+    {
+      title: '外借资金',
+      dataIndex: 'debt',
+      valueType: 'text'
+    },
+    {
+      title: '基金',
+      dataIndex: 'fund',
+      valueType: 'text',
       hideInForm: true
     },
+    {
+      title: '招商银行',
+      dataIndex: 'merchantsBank',
+      valueType: 'text',
+      hideInForm: true
+    },
+    {
+      title: '股票',
+      dataIndex: 'shares',
+      valueType: 'text',
+      hideInForm: true
+    },
+    {
+      title: '微信基金',
+      dataIndex: 'wechatFund',
+      valueType: 'text',
+      hideInForm: true
+    },
+
+    {
+      title: '微信余额',
+      dataIndex: 'wechatYue',
+      valueType: 'text',
+      hideInForm: true
+    },
+
+    {
+      title: '余额宝',
+      dataIndex: 'zfbFund',
+      valueType: 'text',
+      hideInForm: true
+    },
+
+    {
+      title: '支付宝余额',
+      dataIndex: 'zfbYue',
+      valueType: 'text',
+      hideInForm: true
+    },
+
+
     {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="操作"/>,
       dataIndex: 'option',
@@ -177,7 +206,8 @@ const TableList: React.FC = () => {
           <FormattedMessage id="pages.searchTable.config" defaultMessage="修改"/>
         </a>,
         <a key="config" onClick={() => {
-          handleRemove(record)
+          // handleRemove(record)
+          console.log('click delete')
         }}>
           <FormattedMessage
             id="pages.searchTable.subscribeAlert"
@@ -213,9 +243,9 @@ const TableList: React.FC = () => {
             <PlusOutlined/> <FormattedMessage id="pages.searchTable.new" defaultMessage="New"/>
           </Button>,
         ]}
-        request={async (params: API.listInterfaceInfoByPageUsingGETParams) => {
-          console.log("shxl:pagesize",params)
-          const res = await listInterfaceInfoByPageUsingGET({
+        request={async (params: API.listBookkeepingByPageUsingGETParams) => {
+          console.log("shxl:pagesize", params)
+          const res = await listBookkeepingByPageUsingPOST({
             ...params
           })
           if (res.data) {

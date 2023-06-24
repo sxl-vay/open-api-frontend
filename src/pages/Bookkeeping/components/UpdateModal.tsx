@@ -8,10 +8,10 @@ import {ProFormInstance} from "@ant-design/pro-form/lib";
 
 
 export type Props = {
-  values:API.InterfaceInfoVO;
-  columns: ProColumns<API.InterfaceInfoVO>[];
+  values:API.BookkeepingBookVO;
+  columns: ProColumns<API.BookkeepingBookVO>[];
   onCancel: () => void;
-  onSubmit: (values: API.InterfaceInfoVO) => Promise<void>;
+  onSubmit: (values: API.BookkeepingBookVO) => Promise<void>;
   visible: boolean;
 };
 
@@ -33,7 +33,7 @@ const UpdateModal: React.FC<Props> = (props) => {
       type="form"
       columns={columns}
       formRef={formRef}
-      onSubmit={async (value: API.InterfaceInfoVO)=>{
+      onSubmit={async (value: API.BookkeepingBookVO)=>{
         onSubmit?.(value);
       }}
     />

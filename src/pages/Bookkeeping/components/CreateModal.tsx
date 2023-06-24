@@ -7,9 +7,9 @@ import {Modal} from "antd";
 
 
 export type Props = {
-  columns: ProColumns<API.InterfaceInfoVO>[];
+  columns: ProColumns<API.BookkeepingBookVO>[];
   onCancel: () => void;
-  onSubmit: (values: API.InterfaceInfoVO) => Promise<void>;
+  onSubmit: (values: API.BookkeepingBookVO) => Promise<void>;
   visible: boolean;
 };
 
@@ -19,7 +19,7 @@ const CreateModal: React.FC<Props> = (props) => {
     <ProTable
       type="form"
       columns={columns}
-      onSubmit={async (value: API.InterfaceInfoVO)=>{
+      onSubmit={async (value: API.BookkeepingBookVO)=>{
         onSubmit?.(value);
       }}
     />
