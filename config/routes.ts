@@ -5,8 +5,8 @@ export default [
     routes: [{name: '登录', path: '/user/login', component: './User/Login'}],
   },
   {path: '/welcome', name: '欢迎', icon: 'smile', component: './Welcome'},
-  {path: '/echart', name: 'echart', icon: 'smile', component: './test2'},
-  {path: '/echart2', name: 'echart2', icon: 'smile', component: './echart2'},
+  {path: '/echart', name: 'echart', icon: 'smile', component: './echart'},
+  {path: '/echart3', name: 'echart3', icon: 'smile', component: './echart3'},
   {name: '记账本', icon: 'table', path: '/admin/interface', component: './Bookkeeping'},
   // {
   //   path: '/admin',

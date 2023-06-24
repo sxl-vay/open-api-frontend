@@ -17,3 +17,11 @@ export async function getPieChartUsingGET(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
+
+/** getPieTypeChart GET /api/echarts/pieTypeChart */
+export async function getPieTypeChartUsingGET(options?: { [key: string]: any }) {
+  return request<API.BaseResponseListPieChartItemVO_>('/api/echarts/pieTypeChart', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
