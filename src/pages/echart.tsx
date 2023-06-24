@@ -35,18 +35,21 @@ class App extends Component { // 初始化状态
     if (rest.data) {
       const data = rest.data;
       const records = data.records;
+      if (records) {
+        for (let i = 0; i < records.length; i++) {
+          const record = records[i];
+          const time:any = record.createTime;
+          times.push(time.substring(0,10));
+          zfbYue.push(record.zfbYue);
+          zfbFund.push(record.zfbFund);
+          fund.push(record.fund);
+          shares.push(record.shares);
+          constructionBank.push(record.constructionBank);
+          debt.push(record.debt);
 
-      for (let i = 0; i < records.length; i++) {
-        const record = records[i];
-        times.push(record.createTime.substring(0,10))
-        zfbYue.push(record.zfbYue)
-        zfbFund.push(record.zfbFund)
-        fund.push(record.fund)
-        shares.push(record.shares)
-        constructionBank.push(record.constructionBank)
-        debt.push(record.debt)
-
+        }
       }
+
     }
 
     // @ts-ignore

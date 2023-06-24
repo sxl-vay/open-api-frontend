@@ -62,7 +62,8 @@ class App extends Component { // 初始化状态
         legend: {},
         tooltip: {
           trigger: 'axis',
-          showContent: false
+          showContent: true,
+          show:true
         },
         dataset: {
           source: [
