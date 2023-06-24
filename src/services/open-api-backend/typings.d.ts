@@ -1,19 +1,13 @@
 declare namespace API {
+  type BaseResponseBookkeepingBookVO_ = {
+    code?: number;
+    data?: BookkeepingBookVO;
+    message?: string;
+  };
+
   type BaseResponseBoolean_ = {
     code?: number;
     data?: boolean;
-    message?: string;
-  };
-
-  type BaseResponseInt_ = {
-    code?: number;
-    data?: number;
-    message?: string;
-  };
-
-  type BaseResponseInterfaceInfoVO_ = {
-    code?: number;
-    data?: InterfaceInfoVO;
     message?: string;
   };
 
@@ -29,15 +23,9 @@ declare namespace API {
     message?: string;
   };
 
-  type BaseResponsePageInterfaceInfoVO_ = {
+  type BaseResponsePageBookkeepingBookVO_ = {
     code?: number;
-    data?: PageInterfaceInfoVO_;
-    message?: string;
-  };
-
-  type BaseResponsePagePostVO_ = {
-    code?: number;
-    data?: PagePostVO_;
+    data?: PageBookkeepingBookVO_;
     message?: string;
   };
 
@@ -50,12 +38,6 @@ declare namespace API {
   type BaseResponsePageUserVO_ = {
     code?: number;
     data?: PageUserVO_;
-    message?: string;
-  };
-
-  type BaseResponsePostVO_ = {
-    code?: number;
-    data?: PostVO;
     message?: string;
   };
 
@@ -77,6 +59,65 @@ declare namespace API {
     message?: string;
   };
 
+  type BookkeepingAddRequest = {
+    agriculturalBank?: number;
+    bond?: number;
+    constructionBank?: number;
+    debt?: number;
+    fund?: number;
+    merchantsBank?: number;
+    shares?: number;
+    wechatFund?: number;
+    wechatYue?: number;
+    zfbFund?: number;
+    zfbYue?: number;
+  };
+
+  type BookkeepingBookVO = {
+    agriculturalBank?: number;
+    bond?: number;
+    constructionBank?: number;
+    createTime?: string;
+    debt?: number;
+    /** 是否删除 */
+    deleteType?: number;
+    fund?: number;
+    id: number;
+    merchantsBank?: number;
+    shares?: number;
+    userId: number;
+    wechatFund?: number;
+    wechatYue?: number;
+    zfbFund?: number;
+    zfbYue?: number;
+  };
+
+  type BookkeepingQueryRequest = {
+    current?: number;
+    endTime?: string;
+    id?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    startTime?: string;
+    userId?: number;
+  };
+
+  type BookkeepingUpdateRequest = {
+    agriculturalBank?: number;
+    bond?: number;
+    constructionBank?: number;
+    debt?: number;
+    fund?: number;
+    id?: number;
+    merchantsBank?: number;
+    shares?: number;
+    wechatFund?: number;
+    wechatYue?: number;
+    zfbFund?: number;
+    zfbYue?: number;
+  };
+
   type checkUsingGETParams = {
     /** echostr */
     echostr?: string;
@@ -92,16 +133,6 @@ declare namespace API {
     id?: number;
   };
 
-  type getInterfaceInfoVOByIdUsingGETParams = {
-    /** id */
-    id?: number;
-  };
-
-  type getPostVOByIdUsingGETParams = {
-    /** id */
-    id?: number;
-  };
-
   type getUserByIdUsingGETParams = {
     /** id */
     id?: number;
@@ -112,57 +143,7 @@ declare namespace API {
     id?: number;
   };
 
-  type InterfaceInfoAddRequest = {
-    description?: string;
-    method?: number;
-    name?: string;
-    requestHeader?: string;
-    responseHeader?: string;
-    url?: string;
-  };
-
-  type InterfaceInfoQueryInfoRequest = {
-    current?: number;
-    description?: string;
-    id?: number;
-    method?: number;
-    name?: string;
-    pageSize?: number;
-    requestHeader?: string;
-    responseHeader?: string;
-    sortField?: string;
-    sortOrder?: string;
-    status?: number;
-    url?: string;
-    userId?: number;
-  };
-
-  type InterfaceInfoUpdateRequest = {
-    description?: string;
-    id?: number;
-    method?: number;
-    name?: string;
-    requestHeader?: string;
-    responseHeader?: string;
-    status?: number;
-    url?: string;
-  };
-
-  type InterfaceInfoVO = {
-    createTime?: string;
-    description?: string;
-    id?: number;
-    method?: number;
-    name?: string;
-    requestHeader?: string;
-    responseHeader?: string;
-    status?: number;
-    updateTime?: string;
-    url?: string;
-    userId?: number;
-  };
-
-  type listInterfaceInfoByPageUsingGETParams = {
+  type listBookkeepingByPageUsingGETParams = {
     /** current */
     current: number;
     /** pageSize */
@@ -186,27 +167,14 @@ declare namespace API {
     column?: string;
   };
 
-  type PageInterfaceInfoVO_ = {
+  type PageBookkeepingBookVO_ = {
     countId?: string;
     current?: number;
     maxLimit?: number;
     optimizeCountSql?: boolean;
     orders?: OrderItem[];
     pages?: number;
-    records?: InterfaceInfoVO[];
-    searchCount?: boolean;
-    size?: number;
-    total?: number;
-  };
-
-  type PagePostVO_ = {
-    countId?: string;
-    current?: number;
-    maxLimit?: number;
-    optimizeCountSql?: boolean;
-    orders?: OrderItem[];
-    pages?: number;
-    records?: PostVO[];
+    records?: BookkeepingBookVO[];
     searchCount?: boolean;
     size?: number;
     total?: number;
@@ -236,74 +204,6 @@ declare namespace API {
     searchCount?: boolean;
     size?: number;
     total?: number;
-  };
-
-  type PostAddRequest = {
-    content?: string;
-    tags?: string[];
-    title?: string;
-  };
-
-  type PostEditRequest = {
-    content?: string;
-    id?: number;
-    tags?: string[];
-    title?: string;
-  };
-
-  type PostFavourAddRequest = {
-    postId?: number;
-  };
-
-  type PostFavourQueryRequest = {
-    current?: number;
-    pageSize?: number;
-    postQueryRequest?: PostQueryRequest;
-    sortField?: string;
-    sortOrder?: string;
-    userId?: number;
-  };
-
-  type PostQueryRequest = {
-    content?: string;
-    current?: number;
-    favourUserId?: number;
-    id?: number;
-    notId?: number;
-    orTags?: string[];
-    pageSize?: number;
-    searchText?: string;
-    sortField?: string;
-    sortOrder?: string;
-    tags?: string[];
-    title?: string;
-    userId?: number;
-  };
-
-  type PostThumbAddRequest = {
-    postId?: number;
-  };
-
-  type PostUpdateRequest = {
-    content?: string;
-    id?: number;
-    tags?: string[];
-    title?: string;
-  };
-
-  type PostVO = {
-    content?: string;
-    createTime?: string;
-    favourNum?: number;
-    hasFavour?: boolean;
-    hasThumb?: boolean;
-    id?: number;
-    tagList?: string[];
-    thumbNum?: number;
-    title?: string;
-    updateTime?: string;
-    user?: UserVO;
-    userId?: number;
   };
 
   type uploadFileUsingPOSTParams = {
