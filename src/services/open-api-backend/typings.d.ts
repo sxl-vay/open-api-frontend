@@ -11,6 +11,18 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseLineChartVO_ = {
+    code?: number;
+    data?: LineChartVO;
+    message?: string;
+  };
+
+  type BaseResponseListPieChartItemVO_ = {
+    code?: number;
+    data?: PieChartItemVO[];
+    message?: string;
+  };
+
   type BaseResponseLoginUserVO_ = {
     code?: number;
     data?: LoginUserVO;
@@ -145,6 +157,11 @@ declare namespace API {
     id?: number;
   };
 
+  type LineChartVO = {
+    times?: string[];
+    totals?: number[];
+  };
+
   type listBookkeepingByPageUsingGETParams = {
     /** current */
     current: number;
@@ -206,6 +223,11 @@ declare namespace API {
     searchCount?: boolean;
     size?: number;
     total?: number;
+  };
+
+  type PieChartItemVO = {
+    name?: string;
+    value?: number;
   };
 
   type uploadFileUsingPOSTParams = {
