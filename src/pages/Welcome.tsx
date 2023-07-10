@@ -622,8 +622,9 @@ class App extends Component { // 初始化状态
     return <table>
       <tr>
         <td>
-          <div id="pieTypeChart" style={{width: 1000, height: 1000}}></div>
+          <div id="lineChart" style={{width: 800, height: 500}}></div>
         </td>
+
         <td>
           <div id="lineTypeChart" style={{width: 1000, height: 1000}}></div>
         </td>
@@ -633,7 +634,7 @@ class App extends Component { // 初始化状态
           <div id="pieChart" style={{width: 1000, height: 1000}}></div>
         </td>
         <td>
-          <div id="lineChart" style={{width: 800, height: 500}}></div>
+          <div id="pieTypeChart" style={{width: 1000, height: 1000}}></div>
         </td>
       </tr>
 
