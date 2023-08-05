@@ -197,13 +197,6 @@ const TableList: React.FC = () => {
     },
 
     {
-      title: '信用卡未还',
-      dataIndex: 'creditCardArrears',
-      valueType: 'text',
-    },
-
-
-    {
       title: '支付宝余额',
       dataIndex: 'zfbYue',
       valueType: 'text',
@@ -215,6 +208,109 @@ const TableList: React.FC = () => {
       hideInForm: true
     },
 
+
+    {
+      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="操作"/>,
+      dataIndex: 'option',
+      valueType: 'option',
+      render: (_, record) => [
+        <a
+          key="config"
+          onClick={() => {
+            handleUpdateModalOpen(true);
+            setCurrentRow(record);
+          }}
+        >
+          <FormattedMessage id="pages.searchTable.config" defaultMessage="修改"/>
+        </a>,
+        <a key="config" onClick={() => {
+          handleRemove(record)
+          console.log('click delete')
+        }}>
+          <FormattedMessage
+            id="pages.searchTable.subscribeAlert"
+            defaultMessage="删除"
+          />
+        </a>,
+      ],
+    },
+
+
+  ];
+  const createColumns: ProColumns<API.RuleListItem>[] = [
+    {
+      title: '余额宝',
+      dataIndex: 'zfbFund',
+      valueType: 'text',
+    },
+    {
+      title: '基金',
+      dataIndex: 'fund',
+      valueType: 'text',
+    },
+    {
+      title: '债券',
+      dataIndex: 'bond',
+      valueType: 'text'
+    },
+    {
+      title: '股票',
+      dataIndex: 'shares',
+      valueType: 'text',
+    },
+    {
+      title: '建设银行',
+      dataIndex: 'constructionBank',
+      valueType: 'text'
+    },
+
+
+    {
+      title: '微信余额',
+      dataIndex: 'wechatYue',
+      valueType: 'text',
+    },
+    {
+      title: '外借资金',
+      dataIndex: 'debt',
+      valueType: 'text'
+    },
+    {
+      title: '微信基金',
+      dataIndex: 'wechatFund',
+      valueType: 'text',
+    },
+
+    {
+      title: '农业银行',
+      dataIndex: 'agriculturalBank',
+      valueType: 'text'
+    },
+
+
+
+    {
+      title: '招商银行',
+      dataIndex: 'merchantsBank',
+      valueType: 'text',
+    },
+
+    {
+      title: '转移支付',
+      dataIndex: 'transferPayment',
+      valueType: 'text',
+    },
+    {
+      title: '信用卡未还',
+      dataIndex: 'creditCardArrears',
+      valueType: 'text',
+    },
+
+    {
+      title: '支付宝余额',
+      dataIndex: 'zfbYue',
+      valueType: 'text',
+    },
 
     {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="操作"/>,
@@ -409,7 +505,7 @@ const TableList: React.FC = () => {
         )}
       </Drawer>
       <CreateModal
-        columns={columns}
+        columns={createColumns}
         onCancel={() => {
           handleModalOpen(false)
         }}

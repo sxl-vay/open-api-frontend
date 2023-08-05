@@ -103,7 +103,8 @@ export const requestConfig: RequestConfig = {
       const { data } = response as unknown as ResponseStructure;
       console.log('data',data);
       if (data.code !== 0) {
-        throw new Error(data.message)
+        console.log("error");
+        //throw new Error(data.message)
       }
 
       return response;
