@@ -185,8 +185,22 @@ const TableList: React.FC = () => {
       valueType: 'text',
     },
 
+    {
+      title: '转移支付',
+      dataIndex: 'transferPayment',
+      valueType: 'text',
+    },
+    {
+      title: '信用卡未还',
+      dataIndex: 'creditCardArrears',
+      valueType: 'text',
+    },
 
-
+    {
+      title: '信用卡未还',
+      dataIndex: 'creditCardArrears',
+      valueType: 'text',
+    },
 
 
     {
