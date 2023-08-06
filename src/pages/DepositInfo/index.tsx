@@ -4,23 +4,23 @@ import {
   FooterToolbar,
   ModalForm,
   PageContainer,
-  ProDescriptions,
+  ProDescriptions, ProFormSelect,
   ProFormText,
   ProFormTextArea,
   ProTable,
 } from '@ant-design/pro-components';
 import {FormattedMessage, useIntl} from '@umijs/max';
-import {Button, Drawer, message} from 'antd';
+import {Button, Drawer, message, Space, Tag} from 'antd';
 import React, {useRef, useState} from 'react';
 import UpdateModal from './components/UpdateModal';
 import {
   addUsingPOST,
-  deleteBookkeepingInfoUsingPOST,
-  updateBookkeepingInfoUsingPOST,
-  listBookkeepingByPageUsingPOST
+  deleteDepositInfoInfoUsingPOST,
+  listDepositInfoByPageUsingPOST,
+  updateDepositInfoInfoUsingPOST,
 
-} from "@/services/open-api-backend/bookkeepingController";
-import CreateModal from "@/pages/Bookkeeping/components/CreateModal";
+} from "@/services/open-api-backend/depositInfoController";
+import CreateModal from "@/pages/DepositInfo/components/CreateModal";
 
 
 const TableList: React.FC = () => {
@@ -46,7 +46,7 @@ const TableList: React.FC = () => {
    * @zh-CN 添加节点
    * @param fields
    */
-  const handleAdd = async (fields: API.BookkeepingAddRequest) => {
+  const handleAdd = async (fields: API.DepositInfoVO) => {
     const hide = message.loading('正在添加');
     try {
       await addUsingPOST({...fields});
@@ -67,10 +67,10 @@ const TableList: React.FC = () => {
    *
    * @param fields
    */
-  const handleUpdate = async (fields: API.BookkeepingAddRequest) => {
+  const handleUpdate = async (fields: API.DepositInfoVO) => {
     const hide = message.loading('Configuring');
     try {
-      await updateBookkeepingInfoUsingPOST({
+      await updateDepositInfoInfoUsingPOST({
         ...fields,
 
       });
@@ -91,12 +91,12 @@ const TableList: React.FC = () => {
    *
    * @param record
    */
-  const handleRemove = async (record: API.BookkeepingBookVO) => {
+  const handleRemove = async (record: API.DepositInfoVO) => {
 
     const hide = message.loading('正在删除');
     if (!record) return true;
     try {
-      await deleteBookkeepingInfoUsingPOST({
+      await deleteDepositInfoInfoUsingPOST({
         id: record.id
       });
       hide();
@@ -120,98 +120,46 @@ const TableList: React.FC = () => {
     {
       title: 'id',
       dataIndex: 'id',
-      valueType: 'text',
-      hideInForm: true,
-      hideInTable: true
+      valueType: 'text'
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
-      hideInForm: true
+      hideInForm: true,
+      hideInTable: true
+    },
+    {
+      title: '存款时间',
+      dataIndex: 'startTime',
+      valueType: 'dateTime',
+    },
+    {
+      title: '到期时间',
+      dataIndex: 'endTime',
+      valueType: 'dateTime',
+    },
+    {
+      title: '数额',
+      dataIndex: 'amount',
+      valueType: 'number',
+    },
+    {
+      title: '银行卡',
+      dataIndex: 'cardType',
+      valueType: 'number',
+    },
+    {
+      title: '提醒类型',
+      dataIndex: 'remindType',
+      valueType: 'number',
     },
 
     {
-      title: '余额宝',
-      dataIndex: 'zfbFund',
+      title: '备注',
+      dataIndex: 'tips',
       valueType: 'text',
     },
-    {
-      title: '基金',
-      dataIndex: 'fund',
-      valueType: 'text',
-    },
-    {
-      title: '债券',
-      dataIndex: 'bond',
-      valueType: 'text'
-    },
-    {
-      title: '股票',
-      dataIndex: 'shares',
-      valueType: 'text',
-    },
-    {
-      title: '建设银行',
-      dataIndex: 'constructionBank',
-      valueType: 'text'
-    },
-
-
-    {
-      title: '微信余额',
-      dataIndex: 'wechatYue',
-      valueType: 'text',
-    },
-    {
-      title: '外借资金',
-      dataIndex: 'debt',
-      valueType: 'text'
-    },
-    {
-      title: '微信基金',
-      dataIndex: 'wechatFund',
-      valueType: 'text',
-    },
-
-    {
-      title: '农业银行',
-      dataIndex: 'agriculturalBank',
-      valueType: 'text'
-    },
-
-
-
-    {
-      title: '招商银行',
-      dataIndex: 'merchantsBank',
-      valueType: 'text',
-    },
-
-    {
-      title: '转移支付',
-      dataIndex: 'transferPayment',
-      valueType: 'text',
-    },
-    {
-      title: '信用卡未还',
-      dataIndex: 'creditCardArrears',
-      valueType: 'text',
-    },
-
-    {
-      title: '支付宝余额',
-      dataIndex: 'zfbYue',
-      valueType: 'text',
-    },
-    {
-      title: '总计',
-      dataIndex: 'total',
-      valueType: 'text',
-      hideInForm: true
-    },
-
-
     {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="操作"/>,
       dataIndex: 'option',
@@ -220,7 +168,6 @@ const TableList: React.FC = () => {
         <a
           key="config"
           onClick={() => {
-            console.log("shxl:update:",record)
             handleUpdateModalOpen(true);
             setCurrentRow(record);
           }}
@@ -229,7 +176,6 @@ const TableList: React.FC = () => {
         </a>,
         <a key="config" onClick={() => {
           handleRemove(record)
-          console.log('click delete')
         }}>
           <FormattedMessage
             id="pages.searchTable.subscribeAlert"
@@ -241,6 +187,12 @@ const TableList: React.FC = () => {
 
 
   ];
+
+
+  function getUpdateColumns() {
+    let x = columns;
+    return x;
+  }
 
   return (
     <PageContainer>
@@ -265,9 +217,9 @@ const TableList: React.FC = () => {
             <PlusOutlined/> <FormattedMessage id="pages.searchTable.new" defaultMessage="New"/>
           </Button>,
         ]}
-        request={async (params: API.listBookkeepingByPageUsingGETParams) => {
+        request={async (params: API.listDepositInfoByPageUsingGETParams) => {
           console.log("shxl:pagesize", params)
-          const res = await listBookkeepingByPageUsingPOST({
+          const res = await listDepositInfoByPageUsingPOST({
             ...params
           })
           if (res.data) {
@@ -361,7 +313,7 @@ const TableList: React.FC = () => {
         <ProFormTextArea width="md" name="desc"/>
       </ModalForm>
       <UpdateModal
-        columns={columns}
+        columns={getUpdateColumns()}
         onSubmit={async (value) => {
           const success = await handleUpdate(value);
           if (success) {

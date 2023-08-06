@@ -11,6 +11,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseDepositInfoVO_ = {
+    code?: number;
+    data?: DepositInfoVO;
+    message?: string;
+  };
+
   type BaseResponseLineChartVO_ = {
     code?: number;
     data?: LineChartVO;
@@ -38,6 +44,12 @@ declare namespace API {
   type BaseResponsePageBookkeepingBookVO_ = {
     code?: number;
     data?: PageBookkeepingBookVO_;
+    message?: string;
+  };
+
+  type BaseResponsePageDepositInfoVO_ = {
+    code?: number;
+    data?: PageDepositInfoVO_;
     message?: string;
   };
 
@@ -76,10 +88,12 @@ declare namespace API {
     bond?: number;
     constructionBank?: number;
     createTime?: string;
+    creditCardArrears?: number;
     debt?: number;
     fund?: number;
     merchantsBank?: number;
     shares?: number;
+    transferPayment?: number;
     wechatFund?: number;
     wechatYue?: number;
     zfbFund?: number;
@@ -91,6 +105,7 @@ declare namespace API {
     bond?: number;
     constructionBank?: number;
     createTime?: string;
+    creditCardArrears?: number;
     debt?: number;
     deleteType?: number;
     fund?: number;
@@ -98,6 +113,7 @@ declare namespace API {
     merchantsBank?: number;
     shares?: number;
     total?: number;
+    transferPayment?: number;
     userId?: number;
     wechatFund?: number;
     wechatYue?: number;
@@ -121,11 +137,13 @@ declare namespace API {
     bond?: number;
     constructionBank?: number;
     createTime?: string;
+    creditCardArrears?: number;
     debt?: number;
     fund?: number;
     id?: number;
     merchantsBank?: number;
     shares?: number;
+    transferPayment?: number;
     wechatFund?: number;
     wechatYue?: number;
     zfbFund?: number;
@@ -147,6 +165,48 @@ declare namespace API {
     id?: number;
   };
 
+  type DepositInfoAddRequest = {
+    amount?: number;
+    cardType?: number;
+    endTime?: string;
+    remindType?: number;
+    startTime?: string;
+    tips?: string;
+  };
+
+  type DepositInfoQueryRequest = {
+    cardType?: number;
+    createTime?: string;
+    endTime?: string;
+    id?: number;
+    remindType?: number;
+    startTime?: string;
+    userId?: number;
+  };
+
+  type DepositInfoUpdateRequest = {
+    amount?: number;
+    cardType?: number;
+    createTime?: string;
+    endTime?: string;
+    id?: number;
+    remindType?: number;
+    startTime?: string;
+    tips?: string;
+    userId?: number;
+  };
+
+  type DepositInfoVO = {
+    amount?: number;
+    cardtype?: number;
+    createtime?: string;
+    endtime?: string;
+    id?: number;
+    starttime?: string;
+    tips?: string;
+    userid?: number;
+  };
+
   type getUserByIdUsingGETParams = {
     /** id */
     id?: number;
@@ -163,6 +223,13 @@ declare namespace API {
   };
 
   type listBookkeepingByPageUsingGETParams = {
+    /** current */
+    current: number;
+    /** pageSize */
+    pageSize: number;
+  };
+
+  type listDepositInfoByPageUsingGETParams = {
     /** current */
     current: number;
     /** pageSize */
@@ -194,6 +261,19 @@ declare namespace API {
     orders?: OrderItem[];
     pages?: number;
     records?: BookkeepingBookVO[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
+  type PageDepositInfoVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: DepositInfoVO[];
     searchCount?: boolean;
     size?: number;
     total?: number;
