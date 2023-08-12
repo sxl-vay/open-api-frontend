@@ -8,7 +8,8 @@ export default [
   {path: '/echart', name: 'echart', icon: 'smile', component: './echart'},
   {path: '/echart3', name: 'echart3', icon: 'smile', component: './echart3'},
   {name: '记账本', icon: 'table', path: '/admin/bookking', component: './Bookkeeping'},
-  {name: '银行记录', icon: 'table', path: '/admin/deposit', component: './DepositInfo'},
+  {name: '存款记录', icon: 'table', path: '/admin/deposit', component: './DepositInfo'},
+  {name: '银行卡信息', icon: 'table', path: '/admin/cardinfo', component: './CardInfo'},
   // {
   //   path: '/admin',
   //   name: '管理页',

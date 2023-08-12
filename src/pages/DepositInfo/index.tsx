@@ -20,6 +20,9 @@ import {
   updateDepositInfoInfoUsingPOST,
 
 } from "@/services/open-api-backend/depositInfoController";
+import {
+  getSelectInfoUsingGET
+} from "@/services/open-api-backend/selectInfoController"
 import CreateModal from "@/pages/DepositInfo/components/CreateModal";
 
 
@@ -120,7 +123,9 @@ const TableList: React.FC = () => {
     {
       title: 'id',
       dataIndex: 'id',
-      valueType: 'text'
+      valueType: 'text',
+      hideInTable: true,
+      hideInForm:true
     },
     {
       title: '创建时间',
@@ -148,6 +153,7 @@ const TableList: React.FC = () => {
       title: '银行卡',
       dataIndex: 'cardType',
       valueType: 'number',
+      hideInForm: true
     },
     {
       title: '提醒类型',
@@ -184,15 +190,25 @@ const TableList: React.FC = () => {
         </a>,
       ],
     },
-
-
+    {
+      title: <ProFormSelect
+        name="cardType"
+        label="银行卡"
+        request={async () => {
+          let params:API.getSelectInfoUsingGETParams = {};
+          params.typeNumber='cardInfo';
+          const res = await getSelectInfoUsingGET(params)
+          if (res.data) {
+            return res.data;
+          }
+          return null;
+        }}
+        placeholder="请选择银行卡"
+      />,
+      valueType: ProFormSelect,
+      hideInTable: true
+    }
   ];
-
-
-  function getUpdateColumns() {
-    let x = columns;
-    return x;
-  }
 
   return (
     <PageContainer>
@@ -313,7 +329,7 @@ const TableList: React.FC = () => {
         <ProFormTextArea width="md" name="desc"/>
       </ModalForm>
       <UpdateModal
-        columns={getUpdateColumns()}
+        columns={columns}
         onSubmit={async (value) => {
           const success = await handleUpdate(value);
           if (success) {

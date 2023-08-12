@@ -26,6 +26,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
    * 退出登录，并且将当前的 url 保存
    */
   const loginOut = async () => {
+    console.log("shxl::login:")
     await outLogin();
     const { search, pathname } = window.location;
     const urlParams = new URL(window.location.href).searchParams;

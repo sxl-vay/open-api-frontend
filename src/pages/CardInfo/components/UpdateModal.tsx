@@ -19,10 +19,8 @@ const UpdateModal: React.FC<Props> = (props) => {
   const {values,visible, columns, onCancel, onSubmit} = props;
 
   const formRef = useRef<ProFormInstance>();
-  console.log("change",values)
   useEffect(()=>{
     if (formRef) {
-      console.log("do it",values)
       formRef.current?.setFieldsValue(values);
     }
   },[values])

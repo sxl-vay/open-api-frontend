@@ -11,6 +11,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseCardInfo_ = {
+    code?: number;
+    data?: CardInfo;
+    message?: string;
+  };
+
   type BaseResponseDepositInfoVO_ = {
     code?: number;
     data?: DepositInfoVO;
@@ -29,6 +35,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListSelectInfoVO_ = {
+    code?: number;
+    data?: SelectInfoVO[];
+    message?: string;
+  };
+
   type BaseResponseLoginUserVO_ = {
     code?: number;
     data?: LoginUserVO;
@@ -44,6 +56,12 @@ declare namespace API {
   type BaseResponsePageBookkeepingBookVO_ = {
     code?: number;
     data?: PageBookkeepingBookVO_;
+    message?: string;
+  };
+
+  type BaseResponsePageCardInfo_ = {
+    code?: number;
+    data?: PageCardInfo_;
     message?: string;
   };
 
@@ -150,6 +168,14 @@ declare namespace API {
     zfbYue?: number;
   };
 
+  type CardInfo = {
+    cardName?: string;
+    cardNumber?: string;
+    cardType?: 'ABC' | 'BOCOM' | 'BOJ' | 'CCB' | 'CMB' | 'ICBC' | 'PSBOC';
+    id?: number;
+    userId?: number;
+  };
+
   type checkUsingGETParams = {
     /** echostr */
     echostr?: string;
@@ -175,11 +201,12 @@ declare namespace API {
   };
 
   type DepositInfoQueryRequest = {
-    cardType?: number;
-    createTime?: string;
+    current?: number;
     endTime?: string;
     id?: number;
-    remindType?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
     startTime?: string;
     userId?: number;
   };
@@ -187,7 +214,6 @@ declare namespace API {
   type DepositInfoUpdateRequest = {
     amount?: number;
     cardType?: number;
-    createTime?: string;
     endTime?: string;
     id?: number;
     remindType?: number;
@@ -198,13 +224,18 @@ declare namespace API {
 
   type DepositInfoVO = {
     amount?: number;
-    cardtype?: number;
-    createtime?: string;
-    endtime?: string;
+    cardType?: number;
+    createTime?: string;
+    endTime?: string;
     id?: number;
-    starttime?: string;
+    startTime?: string;
     tips?: string;
-    userid?: number;
+    userId?: number;
+  };
+
+  type getSelectInfoUsingGETParams = {
+    /** typeNumber */
+    typeNumber: string;
   };
 
   type getUserByIdUsingGETParams = {
@@ -223,6 +254,13 @@ declare namespace API {
   };
 
   type listBookkeepingByPageUsingGETParams = {
+    /** current */
+    current: number;
+    /** pageSize */
+    pageSize: number;
+  };
+
+  type listByPageUsingGETParams = {
     /** current */
     current: number;
     /** pageSize */
@@ -266,6 +304,19 @@ declare namespace API {
     total?: number;
   };
 
+  type PageCardInfo_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: CardInfo[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
   type PageDepositInfoVO_ = {
     countId?: string;
     current?: number;
@@ -277,6 +328,14 @@ declare namespace API {
     searchCount?: boolean;
     size?: number;
     total?: number;
+  };
+
+  type PageRequest = {
+    current?: number;
+    id?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
   };
 
   type PageUser_ = {
@@ -308,6 +367,11 @@ declare namespace API {
   type PieChartItemVO = {
     name?: string;
     value?: number;
+  };
+
+  type SelectInfoVO = {
+    label?: string;
+    value?: string;
   };
 
   type uploadFileUsingPOSTParams = {

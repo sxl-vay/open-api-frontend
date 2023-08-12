@@ -4,23 +4,26 @@ import {
   FooterToolbar,
   ModalForm,
   PageContainer,
-  ProDescriptions,
+  ProDescriptions, ProFormSelect,
   ProFormText,
   ProFormTextArea,
   ProTable,
 } from '@ant-design/pro-components';
 import {FormattedMessage, useIntl} from '@umijs/max';
-import {Button, Drawer, message} from 'antd';
+import {Button, Drawer, message, Space, Tag} from 'antd';
 import React, {useRef, useState} from 'react';
 import UpdateModal from './components/UpdateModal';
 import {
   addUsingPOST,
-  deleteBookkeepingInfoUsingPOST,
-  updateBookkeepingInfoUsingPOST,
-  listBookkeepingByPageUsingPOST
-
-} from "@/services/open-api-backend/bookkeepingController";
-import CreateModal from "@/pages/Bookkeeping/components/CreateModal";
+  deleteCardInfoUsingPOST,
+  updateCardInfoUsingPOST,
+  listCardInfoByPageUsingGET,
+  listCardInfoByPageUsingPOST
+} from "@/services/open-api-backend/cardInfoController";
+import {
+  getSelectInfoUsingGET
+} from "@/services/open-api-backend/selectInfoController"
+import CreateModal from "./components/CreateModal";
 
 
 const TableList: React.FC = () => {
@@ -46,7 +49,7 @@ const TableList: React.FC = () => {
    * @zh-CN 添加节点
    * @param fields
    */
-  const handleAdd = async (fields: API.BookkeepingAddRequest) => {
+  const handleAdd = async (fields: API.CardInfo) => {
     const hide = message.loading('正在添加');
     try {
       await addUsingPOST({...fields});
@@ -67,10 +70,10 @@ const TableList: React.FC = () => {
    *
    * @param fields
    */
-  const handleUpdate = async (fields: API.BookkeepingAddRequest) => {
+  const handleUpdate = async (fields: API.CardInfo) => {
     const hide = message.loading('Configuring');
     try {
-      await updateBookkeepingInfoUsingPOST({
+      await updateCardInfoUsingPOST({
         ...fields,
 
       });
@@ -91,12 +94,12 @@ const TableList: React.FC = () => {
    *
    * @param record
    */
-  const handleRemove = async (record: API.BookkeepingBookVO) => {
+  const handleRemove = async (record: API.CardInfo) => {
 
     const hide = message.loading('正在删除');
     if (!record) return true;
     try {
-      await deleteBookkeepingInfoUsingPOST({
+      await deleteCardInfoUsingPOST({
         id: record.id
       });
       hide();
@@ -118,99 +121,46 @@ const TableList: React.FC = () => {
 
   const columns: ProColumns<API.RuleListItem>[] = [
     {
+      title: <ProFormSelect
+        name="cardTypeSelect"
+        label="银行类型"
+        request={async () => {
+          let params:API.getSelectInfoUsingGETParams = {};
+          params.typeNumber='cardType';
+          const res = await getSelectInfoUsingGET(params)
+          if (res.data) {
+            return res.data;
+          }
+          return null;
+        }}
+        placeholder="Please select a country"
+      />,
+      valueType: ProFormSelect,
+      hideInTable: true,
+    },
+    {
       title: 'id',
       dataIndex: 'id',
       valueType: 'text',
-      hideInForm: true,
-      hideInTable: true
+      hideInTable: true,
+      hideInForm:true
     },
     {
-      title: '创建时间',
-      dataIndex: 'createTime',
-      valueType: 'dateTime',
+      title: '卡别名',
+      dataIndex: 'cardName',
+      valueType: 'text'
+    },
+    {
+      title: '卡号',
+      dataIndex: 'cardNumber',
+      valueType: 'text'
+    },
+
+    {
+      title: '银行简称',
+      dataIndex: 'cardType',
       hideInForm: true
     },
-
-    {
-      title: '余额宝',
-      dataIndex: 'zfbFund',
-      valueType: 'text',
-    },
-    {
-      title: '基金',
-      dataIndex: 'fund',
-      valueType: 'text',
-    },
-    {
-      title: '债券',
-      dataIndex: 'bond',
-      valueType: 'text'
-    },
-    {
-      title: '股票',
-      dataIndex: 'shares',
-      valueType: 'text',
-    },
-    {
-      title: '建设银行',
-      dataIndex: 'constructionBank',
-      valueType: 'text'
-    },
-
-
-    {
-      title: '微信余额',
-      dataIndex: 'wechatYue',
-      valueType: 'text',
-    },
-    {
-      title: '外借资金',
-      dataIndex: 'debt',
-      valueType: 'text'
-    },
-    {
-      title: '微信基金',
-      dataIndex: 'wechatFund',
-      valueType: 'text',
-    },
-
-    {
-      title: '农业银行',
-      dataIndex: 'agriculturalBank',
-      valueType: 'text'
-    },
-
-
-
-    {
-      title: '招商银行',
-      dataIndex: 'merchantsBank',
-      valueType: 'text',
-    },
-
-    {
-      title: '转移支付',
-      dataIndex: 'transferPayment',
-      valueType: 'text',
-    },
-    {
-      title: '信用卡未还',
-      dataIndex: 'creditCardArrears',
-      valueType: 'text',
-    },
-
-    {
-      title: '支付宝余额',
-      dataIndex: 'zfbYue',
-      valueType: 'text',
-    },
-    {
-      title: '总计',
-      dataIndex: 'total',
-      valueType: 'text',
-      hideInForm: true
-    },
-
 
     {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="操作"/>,
@@ -237,7 +187,6 @@ const TableList: React.FC = () => {
       ],
     },
 
-
   ];
 
   return (
@@ -263,8 +212,8 @@ const TableList: React.FC = () => {
             <PlusOutlined/> <FormattedMessage id="pages.searchTable.new" defaultMessage="New"/>
           </Button>,
         ]}
-        request={async (params: API.listBookkeepingByPageUsingGETParams) => {
-          const res = await listBookkeepingByPageUsingPOST({
+        request={async (params: API.listByPageUsingGETParams) => {
+          const res = await listCardInfoByPageUsingPOST({
             ...params
           })
           if (res.data) {
@@ -404,6 +353,7 @@ const TableList: React.FC = () => {
       </Drawer>
       <CreateModal
         columns={columns}
+
         onCancel={() => {
           handleModalOpen(false)
         }}
