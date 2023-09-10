@@ -129,6 +129,7 @@ declare namespace API {
     fund?: number;
     id?: number;
     merchantsBank?: number;
+    pureTotal?: number;
     shares?: number;
     total?: number;
     transferPayment?: number;
@@ -172,6 +173,14 @@ declare namespace API {
     cardName?: string;
     cardNumber?: string;
     cardType?: 'ABC' | 'BOCOM' | 'BOJ' | 'CCB' | 'CMB' | 'ICBC' | 'PSBOC';
+    id?: number;
+    userId?: number;
+  };
+
+  type CardInfoAddOrUpdateRequest = {
+    cardName?: string;
+    cardNumber?: string;
+    cardTypeSelect?: 'ABC' | 'BOCOM' | 'BOJ' | 'CCB' | 'CMB' | 'ICBC' | 'PSBOC';
     id?: number;
     userId?: number;
   };
@@ -224,7 +233,7 @@ declare namespace API {
 
   type DepositInfoVO = {
     amount?: number;
-    cardType?: number;
+    cardType?: string;
     createTime?: string;
     endTime?: string;
     id?: number;
@@ -374,15 +383,23 @@ declare namespace API {
     value?: string;
   };
 
+  type TotalCountLineVO = {
+    pureTotal?: number;
+    time?: string;
+    total?: number;
+  };
+
   type uploadFileUsingPOSTParams = {
     biz?: string;
   };
 
   type User = {
     createTime?: string;
+    email?: string;
     id?: number;
     isDelete?: number;
     mpOpenId?: string;
+    phoneNumber?: string;
     unionId?: string;
     updateTime?: string;
     userAccount?: string;

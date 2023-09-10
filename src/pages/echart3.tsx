@@ -12,6 +12,7 @@ import {
 
 } from "@/services/open-api-backend/bookkeepingController";
 import {EChartsOption} from "echarts";
+import {getTotalCountLineUsingGET} from "@/services/open-api-backend/echartsController";
 
 class App extends Component { // 初始化状态
   state = {
@@ -24,115 +25,92 @@ class App extends Component { // 初始化状态
       current:1,
       pageSize:99999
     }
-    let rest = await listBookkeepingByPageUsingGET(params)
-    let times: any = ['时间线'];
-
-    let zfbYue: any = ['支付宝余额'];
-    let zfbFund: any = ['余额宝'];
-    let fund: any = ['基金'];
-    let shares: any = ['股票'];
-    let constructionBank: any = ['建行'];
-    let debt: any = ['外借'];
-
+    let rest = await getTotalCountLineUsingGET(params)
+    let xData: any[] = [];
+    let totals: any[] = [];
+    let pureTotals: any[] = [];
 
     if (rest.data) {
       const data = rest.data;
-      const records = data.records;
-      // @ts-ignore
-      for (let i = 0; i < records.length; i++) {
-        // @ts-ignore
-        const record = records[i];
-        var time = record.createTime;
-        times.push(time.substring(0,10))
-        zfbYue.push(record.zfbYue)
-        zfbFund.push(record.zfbFund)
-        fund.push(record.fund)
-        shares.push(record.shares)
-        constructionBank.push(record.constructionBank)
-        debt.push(record.debt)
-
+      for (let i = 0; i < data.length; i++) {
+        xData.push(data[i].createTime)
+        totals.push(data[i].total)
+        pureTotals.push(data[i].pureTotal)
       }
     }
 
-    var chartDom = document.getElementById('pieChart')!;
-    var myChart = echarts.init(chartDom);
-    var option: EChartsOption;
+    const chartDom = document.getElementById('pieChart')!;
+    const myChart = echarts.init(chartDom);
+    let option: EChartsOption;
+
+
     setTimeout(function () {
       option = {
-        legend: {},
+        title: {
+          text: 'Rainfall vs Evaporation',
+          subtext: 'Fake Data'
+        },
         tooltip: {
-          trigger: 'axis',
-          showContent: true,
-          show:true
+          trigger: 'axis'
         },
-        dataset: {
-          source: [
-            times,
-            zfbYue,
-            zfbFund,
-            fund,
-            shares,
-            constructionBank,
-            debt
-          ],
+        legend: {
+          data: ['Rainfall', 'Evaporation']
         },
-        xAxis: {type: 'category'},
-        yAxis: {gridIndex: 0},
-        grid: {top: '55%'},
+        toolbox: {
+          show: true,
+          feature: {
+            dataView: { show: true, readOnly: false },
+            magicType: { show: true, type: ['line', 'bar'] },
+            restore: { show: true },
+            saveAsImage: { show: true }
+          }
+        },
+        calculable: true,
+        xAxis: [
+          {
+            type: 'category',
+            // prettier-ignore
+            data: xData
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          }
+        ],
         series: [
           {
-            type: 'line',
-            smooth: true,
-            seriesLayoutBy: 'row',
-            emphasis: {focus: 'series'}
+            name: '全部总计',
+            type: 'bar',
+            data: totals,
+            markPoint: {
+              data: [
+                { type: 'max', name: 'Max' },
+                { type: 'min', name: 'Min' }
+              ]
+            }/*,
+            markLine: {
+              data: [{ type: 'average', name: 'Avg' }]
+            }*/
           },
           {
-            type: 'line',
-            smooth: true,
-            seriesLayoutBy: 'row',
-            emphasis: {focus: 'series'}
-          },
-          {
-            type: 'line',
-            smooth: true,
-            seriesLayoutBy: 'row',
-            emphasis: {focus: 'series'}
-          },
-          {
-            type: 'line',
-            smooth: true,
-            seriesLayoutBy: 'row',
-            emphasis: {focus: 'series'}
-          },
-          {
-            type: 'line',
-            smooth: true,
-            seriesLayoutBy: 'row',
-            emphasis: {focus: 'series'}
-          },
-          {
-            type: 'line',
-            smooth: true,
-            seriesLayoutBy: 'row',
-            emphasis: {focus: 'series'}
-          },
-          {
-            type: 'line',
-            smooth: true,
-            seriesLayoutBy: 'row',
-            emphasis: {focus: 'series'}
-          },
-          {
-            type: 'pie',
-            id: 'pie',
-            radius: '30%',
-            center: ['50%', '25%'],
-            emphasis: {
-              focus: 'self'
-            }
+            name: '去除转移支付总计',
+            type: 'bar',
+            data: pureTotals,
+            markPoint: {
+              data: [
+                { type: 'max', name: 'Max' },
+                { type: 'min', name: 'Min' }
+              ]
+            }/*,
+            markLine: {
+              data: [{ type: 'average', name: 'Avg' }]
+            }*/
           }
         ]
       };
+
+
 
       myChart.on('updateAxisPointer', function (event: any) {
         const xAxisInfo = event.axesInfo[0];

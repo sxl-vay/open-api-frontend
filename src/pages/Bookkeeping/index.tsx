@@ -205,6 +205,12 @@ const TableList: React.FC = () => {
       valueType: 'text',
     },
     {
+      title: '扣住转义支付总计',
+      dataIndex: 'pureTotal',
+      valueType: 'text',
+      hideInForm: true
+    },
+    {
       title: '总计',
       dataIndex: 'total',
       valueType: 'text',

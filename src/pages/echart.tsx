@@ -29,7 +29,7 @@ class App extends Component { // 初始化状态
     let fund: any = [];
     let shares: any = [];
     let constructionBank: any = [];
-    let debt: any = [];
+    let zsyh: any = [];
 
 
     if (rest.data) {
@@ -45,8 +45,7 @@ class App extends Component { // 初始化状态
           fund.push(record.fund);
           shares.push(record.shares);
           constructionBank.push(record.constructionBank);
-          debt.push(record.debt);
-
+          zsyh.push(record.merchantsBank);
         }
       }
 
@@ -119,10 +118,10 @@ class App extends Component { // 初始化状态
           },
 
           {
-            name: '外借债务',
+            name: '招商银行',
             type: 'line',
             stack: 'Total',
-            data: debt
+            data: zsyh
           }
         ]
       }

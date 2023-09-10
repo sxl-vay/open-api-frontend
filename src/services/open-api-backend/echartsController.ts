@@ -25,3 +25,11 @@ export async function getPieTypeChartUsingGET(options?: { [key: string]: any }) 
     ...(options || {}),
   });
 }
+
+/** getTotalCountLine GET /api/echarts/totalLine */
+export async function getTotalCountLineUsingGET(options?: { [key: string]: any }) {
+  return request<API.BaseResponseListTotalCountLineVO_>('/api/echarts/totalLine', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
