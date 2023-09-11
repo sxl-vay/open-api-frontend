@@ -1,16 +1,14 @@
 import Footer from '@/components/Footer';
-import { Question, SelectLang } from '@/components/RightContent';
-import { LinkOutlined } from '@ant-design/icons';
-import type { Settings as LayoutSettings } from '@ant-design/pro-components';
-import { SettingDrawer } from '@ant-design/pro-components';
-import type { RunTimeLayoutConfig } from '@umijs/max';
-import { history, Link } from '@umijs/max';
-import defaultSettings from '../config/defaultSettings';
-import { requestConfig } from './requestConfig';
-import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+import {Question, SelectLang} from '@/components/RightContent';
+import {AvatarDropdown,AvatarName} from "@/components/RightContent/AvatarDropdown";
+import {LinkOutlined} from '@ant-design/icons';
+import {SettingDrawer} from '@ant-design/pro-components';
+import type {RunTimeLayoutConfig} from '@umijs/max';
+import {history, Link} from '@umijs/max';
+import {requestConfig} from './requestConfig';
 import React from 'react';
-import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
 import {getLoginUserUsingGET} from "@/services/open-api-backend/userController";
+
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
@@ -57,10 +55,10 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     avatarProps: {
       src: initialState?.loginUser?.userName,
       //TODO 临时注释
-      // title: <AvatarName />,
-      // render: (_, avatarChildren) => {
-      //   return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
-      // },
+      title: <AvatarName />,
+      render: (_: any, avatarChildren: any) => {
+        return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
+      },
     },
     waterMarkProps: {
       content: initialState?.loginUser?.userName,
