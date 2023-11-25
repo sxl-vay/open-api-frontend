@@ -229,7 +229,7 @@ const TableList: React.FC = () => {
         rowSelection={{
           onChange: (_, selectedRows) => {
             setSelectedRows(selectedRows);
-          },
+          }
         }}
       />
       {selectedRowsState?.length > 0 && (
